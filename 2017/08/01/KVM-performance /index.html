@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>vagrant | wellzhang.com</title>
+  <title>kvm性能调优 | wellzhang.com</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="VirtualBox + Vagrant安装安装VirtualBox：网址：https://www.virtualbox.org/wiki/Downloads 安装Vagrant：网址：http://downloads.vagrantup.com/ 下载系统镜像：网址：http://www.vagrantbox.es/ 添加镜像具体操作如下：添加镜像到Vagrant：  //镜像的存放位置为/ho">
-<meta name="keywords" content="vagrant  virtualbox">
+  <meta name="description" content="KVM 性能调优CPU TuningCache share tuning对于物理 CPU，同一个 core 的 threads 共享 L2 Cache，同一个 socket 的 cores 共享 L3 cache，所以虚拟机的 vcpu 应当尽可能在同一个 core 和 同一个 socket 中，增加 cache 的命中率，从而提高性能。IBM 测试过，合理绑定 vcpu 能给 JVM 来的 16">
+<meta name="keywords" content="kvm,libvirtd">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vagrant">
-<meta property="og:url" content="http://yoursite.com/2017/08/01/2017-08-01-Vagrant/index.html">
+<meta property="og:title" content="kvm性能调优">
+<meta property="og:url" content="http://yoursite.com/2017/08/01/KVM-performance /index.html">
 <meta property="og:site_name" content="wellzhang.com">
-<meta property="og:description" content="VirtualBox + Vagrant安装安装VirtualBox：网址：https://www.virtualbox.org/wiki/Downloads 安装Vagrant：网址：http://downloads.vagrantup.com/ 下载系统镜像：网址：http://www.vagrantbox.es/ 添加镜像具体操作如下：添加镜像到Vagrant：  //镜像的存放位置为/ho">
+<meta property="og:description" content="KVM 性能调优CPU TuningCache share tuning对于物理 CPU，同一个 core 的 threads 共享 L2 Cache，同一个 socket 的 cores 共享 L3 cache，所以虚拟机的 vcpu 应当尽可能在同一个 core 和 同一个 socket 中，增加 cache 的命中率，从而提高性能。IBM 测试过，合理绑定 vcpu 能给 JVM 来的 16">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2017-09-26T03:56:43.000Z">
+<meta property="og:updated_time" content="2017-08-01T11:32:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="vagrant">
-<meta name="twitter:description" content="VirtualBox + Vagrant安装安装VirtualBox：网址：https://www.virtualbox.org/wiki/Downloads 安装Vagrant：网址：http://downloads.vagrantup.com/ 下载系统镜像：网址：http://www.vagrantbox.es/ 添加镜像具体操作如下：添加镜像到Vagrant：  //镜像的存放位置为/ho">
+<meta name="twitter:title" content="kvm性能调优">
+<meta name="twitter:description" content="KVM 性能调优CPU TuningCache share tuning对于物理 CPU，同一个 core 的 threads 共享 L2 Cache，同一个 socket 的 cores 共享 L3 cache，所以虚拟机的 vcpu 应当尽可能在同一个 core 和 同一个 socket 中，增加 cache 的命中率，从而提高性能。IBM 测试过，合理绑定 vcpu 能给 JVM 来的 16">
   
     <link rel="alternative" href="/atom.xml" title="wellzhang.com" type="application/atom+xml">
   
@@ -155,53 +155,61 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-2017-08-01-Vagrant" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-KVM-performance " class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      vagrant
+      kvm性能调优
     </h1>
   
 
         
-        <a href="/2017/08/01/2017-08-01-Vagrant/" class="archive-article-date">
-  	<time datetime="2017-08-01T11:33:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-01</time>
+        <a href="/2017/08/01/KVM-performance /" class="archive-article-date">
+  	<time datetime="2017-08-01T11:32:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-01</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="VirtualBox-Vagrant"><a href="#VirtualBox-Vagrant" class="headerlink" title="VirtualBox + Vagrant"></a>VirtualBox + Vagrant</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装VirtualBox：<br>网址：<a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener">https://www.virtualbox.org/wiki/Downloads</a></p>
-<p>安装Vagrant：<br>网址：<a href="http://downloads.vagrantup.com/" target="_blank" rel="noopener">http://downloads.vagrantup.com/</a></p>
-<p>下载系统镜像：<br>网址：<a href="http://www.vagrantbox.es/" target="_blank" rel="noopener">http://www.vagrantbox.es/</a></p>
-<h2 id="添加镜像"><a href="#添加镜像" class="headerlink" title="添加镜像"></a>添加镜像</h2><p>具体操作如下：<br>添加镜像到Vagrant：<br>  //镜像的存放位置为/home/box/centos65.box</p>
-<p>  cd/home/box/</p>
-<p>  vagrant box add centosbox centos65.box<br>初始化开发环境：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vagrant init centosbox    #初始化</span><br><span class="line"></span><br><span class="line">vagrant up                #启动环境</span><br></pre></td></tr></table></figure></p>
-<p>SSH登陆：</p>
-<p>  利用Xshell、Putty、SecureCRT等登录。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Ip : 127.0.0.1</span><br><span class="line"></span><br><span class="line">Port : 2222</span><br><span class="line"></span><br><span class="line">Username : root</span><br><span class="line"></span><br><span class="line">Password : vagrant</span><br></pre></td></tr></table></figure></p>
-<p>常用配置<br>Vagrant初始化成功后，会在初始化的目录里生成一个Vagrantfile文件，可以修改该文件进行个性化的定制。</p>
-<p>配置IP:<br>  config.vm.network :private_network, ip: “192.168.33.10”[去掉#]</p>
-<p>  你可以把IP改成其他地址，只要不产生冲突就行。<br>配置同步目录：<br>  config.vm.synced_folder “../data”, “/vagrant_data” [去掉#，修改为下面]</p>
-<p>  config.vm.synced_folder “/home/web/www”, “/data/www“</p>
-<p>  /home/web/www：本地目录<br>  /data/www：    Linux服务器目录<br>配置虚拟内存：<br>  在文件结尾end字符前添加下面一段:</p>
-<p>  config.vm.provider :virtualbox do |vb|</p>
-<pre><code>vb.customize [&quot;modifyvm&quot;, :id, &quot;--memory&quot;, &quot;2048&quot;]
-</code></pre><p>  end</p>
-<p>  //温馨提示：修改配置后 记得 重启虚拟机。<br>打包分发:<br>当你配置好开发环境后，退出并关闭虚拟机。</p>
-<p>  在终端里对开发环境进行打包：</p>
-<p>  vagrant package</p>
-<p>  //打包完成后会在当前目录生成一个package.box的文件，</p>
-<p>  //将这个文件传给其他用户，</p>
-<p>  //其他用户只要添加这个box并用其初始化自己的开发目录,</p>
-<p>  //就能得到一个一模一样的开发环境了。<br>常用命令<br>  vagrant init #初始化</p>
-<p>  vagrant up #启动虚拟机</p>
-<p>  vagrant halt #关闭虚拟机</p>
-<p>  vagrant reload #重启虚拟机</p>
-<p>  vagrant status #查看虚拟机运行状态</p>
+        <h1 id="KVM-性能调优"><a href="#KVM-性能调优" class="headerlink" title="KVM 性能调优"></a>KVM 性能调优</h1><h2 id="CPU-Tuning"><a href="#CPU-Tuning" class="headerlink" title="CPU Tuning"></a>CPU Tuning</h2><h3 id="Cache-share-tuning"><a href="#Cache-share-tuning" class="headerlink" title="Cache share tuning"></a>Cache share tuning</h3><p>对于物理 CPU，同一个 core 的 threads 共享 L2 Cache，同一个 socket 的 cores 共享 L3 cache，所以虚拟机的 vcpu 应当尽可能在同一个 core 和 同一个 socket 中，增加 cache 的命中率，从而提高性能。IBM 测试过，合理绑定 vcpu 能给 JVM 来的 16% 的性能提升[2]。</p>
+<p>实现策略：虚拟机 vcpu 尽可能限定在一个 core 或者一个 socket 中。例如：当 vcpu 为 2 时，2 个 vcpu 应限定在同一个 core 中，当 vcpu 大于 2 小于 12 时，应限定在同一个 socket 中。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">vcpu</span> <span class="attr">placement</span>=<span class="string">'static'</span> <span class="attr">cpuset</span>=<span class="string">'0-5'</span>&gt;</span>4<span class="tag">&lt;/<span class="name">vcpu</span>&gt;</span>       # cpuset 限定 vcpu</span><br></pre></td></tr></table></figure>
+<h3 id="NUMA-tuning"><a href="#NUMA-tuning" class="headerlink" title="NUMA tuning"></a>NUMA tuning</h3><p>网易运维团队测试得出：2 个 vcpu 分别绑定到不同 numa 节点的非超线程核上和分配到一对相邻的超线程核上的性能相差有 30%~40%(通过 SPEC CPU2006 工具测试)。可见，同一个虚拟机的 vcpu 需限定在同一个 NUMA 节点，并且分配该 NUMA 节点下的内存给虚拟机，保证虚拟机尽可能访问 local memory 而非 remote memory。</p>
+<p>关于 memory allocation mode: If memory is overcommitted in strict mode and the guest does not have sufficient swap space, the kernel will kill some guest processes to retrieve additonal memory. Red Hat recommends using preferred allocation and specifying a single nodeset (for example, nodeset=’0’) to prevent this situation[1].</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">numatune</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">memory</span> <span class="attr">mode</span>=<span class="string">"preferred"</span> <span class="attr">nodeset</span>=<span class="string">"0"</span>/&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">numatune</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="IRQ-tuning"><a href="#IRQ-tuning" class="headerlink" title="IRQ tuning"></a>IRQ tuning</h3><p>CPU0 常用于处理中断请求，本身负荷较重[3]。事实上，线上环境 CPU0 完全处理 eth0 的 IRQ，eth1 的 IRQ 完全由另一个 CPU 处理，同时 CPU0 处理着大量的 CAL 类型中断。预留 2 个或者 4 个物理 CPU，这些 CPU 和对应网卡中断做绑定，使得其它 CPU 更好更完整的为云主机所用。  </p>
+<h3 id="VCPU-topology-tuning"><a href="#VCPU-topology-tuning" class="headerlink" title="VCPU topology tuning"></a>VCPU topology tuning</h3><p>Selecting any desired number of sockets, but with only a single core and a single thread usually gives the best performance results[1]. 即 VCPU 的 topology 设置为 sockets = vcpu_number, cores = 1, threads = 1. </p>
+<p>##Disk IO Tuning</p>
+<p>###Disk IO cache Tuning</p>
+<p>kvm 支持多种虚拟机多种 IO Cache 方式：writeback, none, writethrough 等。性能上：writeback &gt; none &gt; writethrough，安全上 writeback &lt; none &lt; writethrough。For the best storage performance on guest operating systems that use raw disk volumes or partitions, completely avoid the page cache on the host[2].</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">disk</span> <span class="attr">type</span>=<span class="string">'file'</span> <span class="attr">device</span>=<span class="string">'disk'</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">driver</span> <span class="attr">name</span>=<span class="string">'qemu'</span> <span class="attr">type</span>=<span class="string">'qcow2'</span> <span class="attr">cache</span>=<span class="string">'none'</span>/&gt;</span>  # cache 可为 writeback, none, writethrough，directsync，unsafe 等</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">disk</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Disk-IO-scheduler"><a href="#Disk-IO-scheduler" class="headerlink" title="Disk IO scheduler"></a>Disk IO scheduler</h3><p>cfq 参数调优。</p>
+<p>##Memory Tuning</p>
+<ol>
+<li>关于 zone_reclaim_mode，设置为 disable 。</li>
+<li>关于 swappiness 参数，若 CPU macro-architecture 非 Intel Nehalem 架构，无需要修改优化。</li>
+<li>关闭 KVM 内存共享：When KSM merges across nodes on a NUMA host with multiple guest virtual machines, guests and CPUs from more distant nodes can suffer a significant increase of access latency to the merged KSM page[1].<br>Disable KSM 方式有两种： </li>
+</ol>
+<p>1) 禁止某个 Guest 与其它 Guest 共享内存，XML 文件可配置为</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">memoryBacking</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">nosharepages</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">memoryBacking</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>2)  禁止所有 Guest 直接共享内存，Host 配置为</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">echo 0 &gt; /sys/kernel/mm/ksm/pages_shared</span><br><span class="line"></span><br><span class="line">echo 0 &gt; /sys/kernel/mm/ksm/pages_sharing</span><br></pre></td></tr></table></figure>
+<ol>
+<li>打开透明大页：KVM guests can be deployed with huge page memory support in order to improve performance by increasing CPU cache hits against the Transaction Lookaside Buffer (TLB)[1].<br>打开透明大页方式有两种：</li>
+</ol>
+<p>1) 允许某个 Guest 开启透明大页</p>
+<p>Guest XML Format</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">memoryBacking</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">hugepages</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">memoryBacking</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">echo 25000 &gt; /pro c/sys/vm/nr_hugepages</span><br><span class="line"></span><br><span class="line">mount -t hugetlbfs hugetlbfs /dev/hugepages</span><br><span class="line"></span><br><span class="line">service libvirtd restart</span><br></pre></td></tr></table></figure>
+<p>2) 允许 Host 中所有 Guest 开启透明大页</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">echo always &gt; /sys/kernel/mm/transparent_hugepage/enabled</span><br><span class="line"></span><br><span class="line">echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag</span><br><span class="line"></span><br><span class="line">echo 0 &gt; /sys/kernel/mm/transparent_hugepage/khugepaged/defrag</span><br></pre></td></tr></table></figure>
+<p>##Network IO Tuning<br>开启 vhost_net 模式[3]。 </p>
+<p>参考资料</p>
+<p>1.Red Hat Enterprise Linux 6 Virtualization Tuning Optimization Guide<br>2.Tuning KVM for performance    IBM<br>3.网易 openstack 部署运维实战</p>
 
       
 
@@ -215,7 +223,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vagrant</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">kvm libvirtd</a>
         		</li>
       		
 		</ul>
@@ -227,7 +235,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/201708//" class="article-tag-list-link color2">201708</a>
+        			<a href="/categories/201706//" class="article-tag-list-link color2">201706</a>
         		</li>
       		
 		</ul>
@@ -282,7 +290,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2017/08/01/2017-08-01-Vagrant/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2017/08/01/KVM-performance /" alt="微信分享二维码">
     </div>
 </div>
 
@@ -296,20 +304,15 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/09/26/2017-08-05-vagrantfile/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/08/01/Vagrant/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          vagrantfile
+          vagrant
         
       </div>
     </a>
   
-  
-    <a href="/2017/08/01/2017-06-11-KVM-performance /" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">kvm性能调优</div>
-      <i class="icon-circle-right"></i>
-    </a>
   
 </nav>
 

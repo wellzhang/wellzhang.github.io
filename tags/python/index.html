@@ -6,20 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>kvm性能调优 | wellzhang.com</title>
+  <title>Tag: python | wellzhang.com</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="KVM 性能调优CPU TuningCache share tuning对于物理 CPU，同一个 core 的 threads 共享 L2 Cache，同一个 socket 的 cores 共享 L3 cache，所以虚拟机的 vcpu 应当尽可能在同一个 core 和 同一个 socket 中，增加 cache 的命中率，从而提高性能。IBM 测试过，合理绑定 vcpu 能给 JVM 来的 16">
-<meta name="keywords" content="kvm,libvirtd">
-<meta property="og:type" content="article">
-<meta property="og:title" content="kvm性能调优">
-<meta property="og:url" content="http://yoursite.com/2017/08/01/KVM-performance /index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="wellzhang.com">
+<meta property="og:url" content="http://yoursite.com/tags/python/index.html">
 <meta property="og:site_name" content="wellzhang.com">
-<meta property="og:description" content="KVM 性能调优CPU TuningCache share tuning对于物理 CPU，同一个 core 的 threads 共享 L2 Cache，同一个 socket 的 cores 共享 L3 cache，所以虚拟机的 vcpu 应当尽可能在同一个 core 和 同一个 socket 中，增加 cache 的命中率，从而提高性能。IBM 测试过，合理绑定 vcpu 能给 JVM 来的 16">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2017-08-01T11:32:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kvm性能调优">
-<meta name="twitter:description" content="KVM 性能调优CPU TuningCache share tuning对于物理 CPU，同一个 core 的 threads 共享 L2 Cache，同一个 socket 的 cores 共享 L3 cache，所以虚拟机的 vcpu 应当尽可能在同一个 core 和 同一个 socket 中，增加 cache 的命中率，从而提高性能。IBM 测试过，合理绑定 vcpu 能给 JVM 来的 16">
+<meta name="twitter:title" content="wellzhang.com">
   
     <link rel="alternative" href="/atom.xml" title="wellzhang.com" type="application/atom+xml">
   
@@ -155,195 +150,71 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-KVM-performance " class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      kvm性能调优
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/03/12/python3控制符显示异常/" class="archive-article-date">
+  	<time datetime="2018-03-12T08:12:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-12</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/03/12/python3控制符显示异常/">python3 交互界面控制符异常处理</a>
     </h1>
   
 
-        
-        <a href="/2017/08/01/KVM-performance /" class="archive-article-date">
-  	<time datetime="2017-08-01T11:32:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="KVM-性能调优"><a href="#KVM-性能调优" class="headerlink" title="KVM 性能调优"></a>KVM 性能调优</h1><h2 id="CPU-Tuning"><a href="#CPU-Tuning" class="headerlink" title="CPU Tuning"></a>CPU Tuning</h2><h3 id="Cache-share-tuning"><a href="#Cache-share-tuning" class="headerlink" title="Cache share tuning"></a>Cache share tuning</h3><p>对于物理 CPU，同一个 core 的 threads 共享 L2 Cache，同一个 socket 的 cores 共享 L3 cache，所以虚拟机的 vcpu 应当尽可能在同一个 core 和 同一个 socket 中，增加 cache 的命中率，从而提高性能。IBM 测试过，合理绑定 vcpu 能给 JVM 来的 16% 的性能提升[2]。</p>
-<p>实现策略：虚拟机 vcpu 尽可能限定在一个 core 或者一个 socket 中。例如：当 vcpu 为 2 时，2 个 vcpu 应限定在同一个 core 中，当 vcpu 大于 2 小于 12 时，应限定在同一个 socket 中。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">vcpu</span> <span class="attr">placement</span>=<span class="string">'static'</span> <span class="attr">cpuset</span>=<span class="string">'0-5'</span>&gt;</span>4<span class="tag">&lt;/<span class="name">vcpu</span>&gt;</span>       # cpuset 限定 vcpu</span><br></pre></td></tr></table></figure>
-<h3 id="NUMA-tuning"><a href="#NUMA-tuning" class="headerlink" title="NUMA tuning"></a>NUMA tuning</h3><p>网易运维团队测试得出：2 个 vcpu 分别绑定到不同 numa 节点的非超线程核上和分配到一对相邻的超线程核上的性能相差有 30%~40%(通过 SPEC CPU2006 工具测试)。可见，同一个虚拟机的 vcpu 需限定在同一个 NUMA 节点，并且分配该 NUMA 节点下的内存给虚拟机，保证虚拟机尽可能访问 local memory 而非 remote memory。</p>
-<p>关于 memory allocation mode: If memory is overcommitted in strict mode and the guest does not have sufficient swap space, the kernel will kill some guest processes to retrieve additonal memory. Red Hat recommends using preferred allocation and specifying a single nodeset (for example, nodeset=’0’) to prevent this situation[1].</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">numatune</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">memory</span> <span class="attr">mode</span>=<span class="string">"preferred"</span> <span class="attr">nodeset</span>=<span class="string">"0"</span>/&gt;</span> </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">numatune</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="IRQ-tuning"><a href="#IRQ-tuning" class="headerlink" title="IRQ tuning"></a>IRQ tuning</h3><p>CPU0 常用于处理中断请求，本身负荷较重[3]。事实上，线上环境 CPU0 完全处理 eth0 的 IRQ，eth1 的 IRQ 完全由另一个 CPU 处理，同时 CPU0 处理着大量的 CAL 类型中断。预留 2 个或者 4 个物理 CPU，这些 CPU 和对应网卡中断做绑定，使得其它 CPU 更好更完整的为云主机所用。  </p>
-<h3 id="VCPU-topology-tuning"><a href="#VCPU-topology-tuning" class="headerlink" title="VCPU topology tuning"></a>VCPU topology tuning</h3><p>Selecting any desired number of sockets, but with only a single core and a single thread usually gives the best performance results[1]. 即 VCPU 的 topology 设置为 sockets = vcpu_number, cores = 1, threads = 1. </p>
-<p>##Disk IO Tuning</p>
-<p>###Disk IO cache Tuning</p>
-<p>kvm 支持多种虚拟机多种 IO Cache 方式：writeback, none, writethrough 等。性能上：writeback &gt; none &gt; writethrough，安全上 writeback &lt; none &lt; writethrough。For the best storage performance on guest operating systems that use raw disk volumes or partitions, completely avoid the page cache on the host[2].</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">disk</span> <span class="attr">type</span>=<span class="string">'file'</span> <span class="attr">device</span>=<span class="string">'disk'</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">driver</span> <span class="attr">name</span>=<span class="string">'qemu'</span> <span class="attr">type</span>=<span class="string">'qcow2'</span> <span class="attr">cache</span>=<span class="string">'none'</span>/&gt;</span>  # cache 可为 writeback, none, writethrough，directsync，unsafe 等</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">disk</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="Disk-IO-scheduler"><a href="#Disk-IO-scheduler" class="headerlink" title="Disk IO scheduler"></a>Disk IO scheduler</h3><p>cfq 参数调优。</p>
-<p>##Memory Tuning</p>
-<ol>
-<li>关于 zone_reclaim_mode，设置为 disable 。</li>
-<li>关于 swappiness 参数，若 CPU macro-architecture 非 Intel Nehalem 架构，无需要修改优化。</li>
-<li>关闭 KVM 内存共享：When KSM merges across nodes on a NUMA host with multiple guest virtual machines, guests and CPUs from more distant nodes can suffer a significant increase of access latency to the merged KSM page[1].<br>Disable KSM 方式有两种： </li>
-</ol>
-<p>1) 禁止某个 Guest 与其它 Guest 共享内存，XML 文件可配置为</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">memoryBacking</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">nosharepages</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">memoryBacking</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>2)  禁止所有 Guest 直接共享内存，Host 配置为</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">echo 0 &gt; /sys/kernel/mm/ksm/pages_shared</span><br><span class="line"></span><br><span class="line">echo 0 &gt; /sys/kernel/mm/ksm/pages_sharing</span><br></pre></td></tr></table></figure>
-<ol>
-<li>打开透明大页：KVM guests can be deployed with huge page memory support in order to improve performance by increasing CPU cache hits against the Transaction Lookaside Buffer (TLB)[1].<br>打开透明大页方式有两种：</li>
-</ol>
-<p>1) 允许某个 Guest 开启透明大页</p>
-<p>Guest XML Format</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">memoryBacking</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">hugepages</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">memoryBacking</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">echo 25000 &gt; /pro c/sys/vm/nr_hugepages</span><br><span class="line"></span><br><span class="line">mount -t hugetlbfs hugetlbfs /dev/hugepages</span><br><span class="line"></span><br><span class="line">service libvirtd restart</span><br></pre></td></tr></table></figure>
-<p>2) 允许 Host 中所有 Guest 开启透明大页</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">echo always &gt; /sys/kernel/mm/transparent_hugepage/enabled</span><br><span class="line"></span><br><span class="line">echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag</span><br><span class="line"></span><br><span class="line">echo 0 &gt; /sys/kernel/mm/transparent_hugepage/khugepaged/defrag</span><br></pre></td></tr></table></figure>
-<p>##Network IO Tuning<br>开启 vhost_net 模式[3]。 </p>
-<p>参考资料</p>
-<p>1.Red Hat Enterprise Linux 6 Virtualization Tuning Optimization Guide<br>2.Tuning KVM for performance    IBM<br>3.网易 openstack 部署运维实战</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">kvm libvirtd</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/201706//" class="article-tag-list-link color2">201706</a>
+        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2017/08/01/KVM-performance /" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2017/08/01/Centos-Compiling-GCC/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          centos6编译gcc
-        
-      </div>
-    </a>
   
   
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -366,9 +237,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
@@ -436,15 +307,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">kvm libvirtd</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gcc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">kvm libvirtd</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -55,7 +55,7 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/tags/随笔/">随笔</a></li>
+				<li><a href="/tags/python/">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -135,7 +135,7 @@
 				
 					<li style="width: 50%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+					<li style="width: 50%"><a href="/tags/python/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -151,6 +151,98 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-openldap安装" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/14/openldap安装/">openldap server安装</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/14/openldap安装/" class="archive-article-date">
+  	<time datetime="2018-03-13T16:47:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="openldap-安装"><a href="#openldap-安装" class="headerlink" title="openldap 安装"></a>openldap 安装</h2><p>由于YUM仓库里的RPM包OpenLDAP版本较低，在使用TLS加密连接到服务器端的时候会报错，因此采用源码包进行安装，安装步骤如下</p>
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　　 yum install samba samba-client samba-common openssl-devel  db4-devel   -y</span><br></pre></td></tr></table></figure>
+<h3 id="下载源码包进行安装"><a href="#下载源码包进行安装" class="headerlink" title="下载源码包进行安装"></a>下载源码包进行安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">　　  wget  ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.4.35.tgz</span><br><span class="line">　　  tar zxvf  openldap-2.4.35.tgz  -C  /usr/local/src</span><br><span class="line">　　  cd   /usr/local/src/openldap-2.4.35</span><br><span class="line">　　  ./configure --with-tls --prefix=/usr/local/openldap-server</span><br><span class="line">　　  make depend</span><br><span class="line">　　  make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<h3 id="添加环境变量路径"><a href="#添加环境变量路径" class="headerlink" title="添加环境变量路径"></a>添加环境变量路径</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo PATH=/usr/local/openldap-server/bin:/usr/local/openldap-server/sbin:$PATH &gt; /etc/profile.d/openldap.sh</span><br><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+<h2 id="openldap配置"><a href="#openldap配置" class="headerlink" title="openldap配置"></a>openldap配置</h2><h3 id="用户配置"><a href="#用户配置" class="headerlink" title="用户配置"></a>用户配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">groupadd ldap</span><br><span class="line">useradd -M -s /sbin/nologin -g ldap ldap</span><br></pre></td></tr></table></figure>
+<h3 id="DB-CONFIG"><a href="#DB-CONFIG" class="headerlink" title="DB_CONFIG"></a>DB_CONFIG</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/local/openldap-server/var/openldap-data/DB_CONFIG.example /usr/local/openldap-server/var/openldap-data/DB_CONFIG</span><br></pre></td></tr></table></figure>
+<h3 id="修改schema"><a href="#修改schema" class="headerlink" title="修改schema"></a>修改schema</h3><pre><code>根据需求添加
+</code></pre><h3 id="修改ldapd-conf"><a href="#修改ldapd-conf" class="headerlink" title="修改ldapd.conf"></a>修改ldapd.conf</h3><pre><code>根据需求修改
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">openldap</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/openldap//" class="article-tag-list-link color4">openldap</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/14/openldap安装/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -845,6 +937,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">openldap</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">python</a>
